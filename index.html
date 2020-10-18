@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>This Day in Space</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet"
+        type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+
+<body>
+    <header>
+        <h1>This Day in Space</h1>
+    </header>
+    <main>
+        <div class="date-wrap">
+            <input id="date-picker" data-date-format="y-m-d"/>
+            <input type="button" id="date-picker-js" name="submit" value="submit">
+            
+        </div>
+        <section id="results" class="hidden">
+            <div id="aPOD-results">
+                <p>APOD here</p>
+            </div>
+            <div id="neoWs-results">
+                <p>NeoWs here</p>
+            </div>
+            <div id="insight-results">
+                <p>insight here</p>
+            </div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+
+</html>
