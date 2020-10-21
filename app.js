@@ -24,7 +24,7 @@ function fetchAndCatch(url) {
         .catch(err => {
             $('#js-error-message').text(`Something went wrong: ${err.message}`);
         });
-    }
+}
 
 function getApod(today) {
 
@@ -49,7 +49,7 @@ function getNeoWs(today) {
     const queryString = formatParams(params)
     const url = searchURL + "/neo/rest/v1/feed?" + queryString;
 
-    return fetchAndCatch(url); 
+    return fetchAndCatch(url);
 }
 
 function getFetchRequests(selectedDate) {
@@ -67,23 +67,52 @@ function EarthToSOL() {
     //function may be needed to convert earth day to SOL day for Insight API
 }
 
-function displayResults([apodData, neowsData], selectedDate) {
-    $("#aPOD-results").empty();
-    $("#aPOD-results").append(`
+function isVideo(apodData) {
+    //determine if ApodData is a youtube video, or an image. 
+    if (apodData.url.includes("youtube")) {
+        $("#aPOD-results").append(`
+        <h3>Astronomy Picture of The Day</h3>
+        <p>${apodData.title}</p>
+        <iframe
+        src=${apodData.url} alt="Astronomy Picture of the Day">
+        </iframe>`);
+    } else {
+        $("#aPOD-results").append(`
                     <h3>Astronomy Picture of The Day</h3>
                     <p>${apodData.title}</p>
                     <img src=${apodData.url} alt="Astronomy Picture of the Day"></img>`);
-    $("#neoWs-results").empty();                 
+    }
+}
+function displayResults([apodData, neowsData], selectedDate) {
+
+    //using .toLocaleString to add commas and round to two decimals. 
+    let options = {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }
+    let mphRounded = parseFloat(neowsData.near_earth_objects[selectedDate][0].close_approach_data[0].relative_velocity.miles_per_hour).toLocaleString(undefined, options);
+    let distanceRounded = parseFloat(neowsData.near_earth_objects[selectedDate][0].close_approach_data[0].miss_distance.miles).toLocaleString(undefined, options);
+
+    $("#aPOD-results").empty();
+
+    isVideo(apodData);
+
+    $("#neoWs-results").empty();
     $("#neoWs-results").append(`
                     <h3>Near Earth Object Alert!</h3>
-                    <p>The asteroid ${neowsData.near_earth_objects[selectedDate][0].name.replace("(",'').replace(")","")} is traveling 
-                    at a relative speed of ${neowsData.near_earth_objects[selectedDate][0].close_approach_data[0].relative_velocity.miles_per_hour} miles per hour,
-                    and is approximately ${neowsData.near_earth_objects[selectedDate][0].close_approach_data[0].miss_distance.miles} miles from earth! </p>`)
-    $("#insight-results").empty();                 
+                    <p>The asteroid ${neowsData.near_earth_objects[selectedDate][0].name.replace("(", '').replace(")", "")} is traveling 
+                    at a relative speed of ${mphRounded} miles per hour,
+                    and is approximately ${distanceRounded} miles from earth! </p>`)
+    $("#insight-results").empty();
     $("#results").removeClass("hidden");
+
+    var num = 11234;
+    console.log(num);
+    console.log(distanceRounded);
 }
 
 function watchCalender() {
+
     $("#date-picker").flatpickr({
         enableTime: false,
         dateFormat: "Y-m-d",
@@ -100,11 +129,9 @@ function watchCalender() {
 }
 
 function hideResults() {
-//a function that hides results based on user request 
+    //a function that hides results based on user request 
 }
 
-function isVideo() {
-//need function to determine if Apod Json object url is a youtube link or img. Consider using .includes, or .endsWith 
-}
+
 
 $(watchCalender); 
