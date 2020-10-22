@@ -26,10 +26,10 @@ function fetchAndCatch(url) {
         });
 }
 
-function getApod(today) {
+function getApod(selectedDate) {
 
     const params = {
-        date: today,
+        date: selectedDate,
         api_key: apiKey,
     }
 
@@ -39,10 +39,10 @@ function getApod(today) {
     return fetchAndCatch(url);
 }
 
-function getNeoWs(today) {
+function getNeoWs(selectedDate) {
     const params = {
-        start_date: today,
-        end_date: today,
+        start_date: selectedDate,
+        end_date: selectedDate,
         api_key: apiKey,
     }
 
@@ -55,17 +55,25 @@ function getNeoWs(today) {
 function getFetchRequests(selectedDate) {
     const apodFetch = getApod(selectedDate);
     const neowsFetch = getNeoWs(selectedDate);
-    Promise.all([apodFetch, neowsFetch])
+    const marsPhotosFetch = marsPhotos(selectedDate); 
+    Promise.all([apodFetch, neowsFetch, marsPhotosFetch])
         .then(promiseAll => displayResults(promiseAll, selectedDate));
 }
 
-function getInsight() {
+function marsPhotos(selectedDate) {
     //get request for Insight API
+    const params = {
+        earth_date: selectedDate,
+        api_key: apiKey
+    }
+
+    const queryString = formatParams(params)
+    const url = searchURL + "/mars-photos/api/v1/rovers/curiosity/photos?" + queryString;
+
+    return fetchAndCatch(url);
 }
 
-function EarthToSOL() {
-    //function may be needed to convert earth day to SOL day for Insight API
-}
+
 
 function isVideo(apodData) {
     //determine if ApodData is a youtube video, or an image. 
@@ -83,7 +91,7 @@ function isVideo(apodData) {
                     <img src=${apodData.url} alt="Astronomy Picture of the Day"></img>`);
     }
 }
-function displayResults([apodData, neowsData], selectedDate) {
+function displayResults([apodData, neowsData, marsPhotosData], selectedDate) {
 
     //using .toLocaleString to add commas and round to two decimals. 
     let options = {
@@ -103,7 +111,11 @@ function displayResults([apodData, neowsData], selectedDate) {
                     <p>The asteroid ${neowsData.near_earth_objects[selectedDate][0].name.replace("(", '').replace(")", "")} is traveling 
                     at a relative speed of ${mphRounded} miles per hour,
                     and is approximately ${distanceRounded} miles from earth! </p>`)
-    $("#insight-results").empty();
+    $("#mars-results").empty();
+    $("#mars-results").append(`
+                    <h3>Photos from Mars!</h3>
+                    <p>The Mars rover took the below photo on this date, ${selectedDate}</p>
+                    <img src= ${marsPhotosData.photos[0].img_src} alt="Mars Rover Photo"></img>`); 
     $("#results").removeClass("hidden");
 
     var num = 11234;
