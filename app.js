@@ -79,7 +79,7 @@ function isVideo(apodData) {
     //determine if ApodData is a youtube video, or an image. 
     if (apodData.url.includes("youtube")) {
         $("#aPOD-results").append(`
-        <h3>Astronomy Picture of The Day</h3>
+        <h3>Astronomy Picture of The Day!</h3>
         <p>${apodData.title}</p>
         <iframe
         src=${apodData.url} alt="Astronomy Picture of the Day">
@@ -134,6 +134,13 @@ function watchCalender() {
 
     });
 
+    //.ready to generate data baased on the current date by default. 
+    $("#date-picker-js").ready(function () {
+        const selectedDate = $("#date-picker").val();
+        getFetchRequests(selectedDate);
+    });
+
+    //.click if user wants to change date. 
     $("#date-picker-js").click(function () {
         const selectedDate = $("#date-picker").val();
         getFetchRequests(selectedDate);
