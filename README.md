@@ -12,9 +12,11 @@ TODO:
 [x]Finsih implementing a Previous/Next navigation system for NeoWs system.
 [x]Implement settings to allow user to remove info for specific data.
 [x]horizontal rules
-[]Serious refactoring 
-[]handle edge case where info isn't available for the selected date. 
+[]Serious refactoring after feedback. 
+[x]handle edge case where info isn't available for the selected date. 
 []optional: Add rear photo to Mars Rover
+[x]HTML & CSS validation
+[x]Ally checklist 
 
 
 Author: Benjamin Whitehurst 

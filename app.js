@@ -26,10 +26,6 @@ function fetchAndCatch(url) {
             }
             throw new Error(response.statusText);
         })
-        //.then(responseJson => displayResults(responseJson))
-        .catch(err => {
-            $('#js-error-message').text(`Something went wrong: ${err.message}`);
-        });
 }
 
 function getApod(selectedDate) {
@@ -63,7 +59,13 @@ function getFetchRequests(selectedDate) {
     const neowsFetch = getNeoWs(selectedDate);
     const marsPhotosFetch = getMarsPhotos(selectedDate);
     Promise.all([apodFetch, neowsFetch, marsPhotosFetch])
-        .then(promiseAll => displayResults(promiseAll, selectedDate));
+        .then(promiseAll => displayResults(promiseAll, selectedDate))
+        .catch(err => {
+            $("#aPOD-results").empty();
+            $("#neoWs-results").empty();
+            $("#mars-results").empty();
+            $('#js-error-message').html(`Something went wrong. Try a different date.`);
+        });
 }
 
 function getMarsPhotos(selectedDate) {
@@ -83,14 +85,12 @@ function asteroidNavigator(selectedDate) {
     $("#next-button").click(function () {
         if (store.asteroidTracker < store.neowsArray.length - 1) {
             store.asteroidTracker += 1;
-            $(".neows").empty(); 
             neoWsHTMLgenerator(selectedDate);
         }
     });
     $("#previous-button").click(function () {
         if (store.asteroidTracker > 0) {
             store.asteroidTracker -= 1;
-            $(".neows").empty(); 
             neoWsHTMLgenerator(selectedDate);
         }
     });
@@ -109,25 +109,20 @@ function neoWsHTMLgenerator(selectedDate) {
     $("#neoWs-results").empty();
     $("#neoWs-results").append(`
                     <h3>Near Earth Object Alert!</h3>
-                    <p class>There are ${store.neowsArray.length} asteroids making their closest approach to Earth on ${selectedDate}.</p>
+                    <p>There are ${store.neowsArray.length} asteroids making their closest approach to Earth on ${selectedDate}.</p>
                     <p>The asteroid ${store.currentAsteroid.name.replace("(", '').replace(")", "")} is traveling 
                     at a relative speed of ${mphRounded} miles per hour,
                     and is approximately ${distanceRounded} miles from earth! </p>
-                    <button id="previous-button" class="ast-buttons">Previous</button>
-                    <button id="next-button" class="ast-buttons">Next</button>`);
-    $("#neoWs-results").after(`<div class="checkbox neows"><input type="checkbox" id="neows-checkbox" name="neows-checkbox" value = true>
-                    <label for="neows-checkbox">hide</label>
-                    <hr>
-                    </div>`);                
+                    <button id="previous-button">Previous</button>
+                    <button id="next-button">Next</button>`);
     asteroidNavigator(selectedDate);
-    hideResults(); 
+    hideResults();
 }
 
-function fillStore(neowsData, selectedDate) {
+function renderNeows(neowsData, selectedDate) {
 
     store.neowsArray = neowsData.near_earth_objects[selectedDate];
     store.currentAsteroid = store.neowsArray[store.asteroidTracker];
-
     neoWsHTMLgenerator(selectedDate);
 }
 
@@ -139,42 +134,31 @@ function renderApod(apodData) {
                     <h3>Astronomy Picture of The Day!</h3>
                     <p>${apodData.title}</p>
                     <iframe
-                    src=${apodData.url} alt="Astronomy Picture of the Day">
-                    </iframe>`); 
-        $("#aPOD-results").after(`<div class ="checkbox"><input type="checkbox" id="apod-checkbox" name="apod-checkbox" value = true>
-                    <label for="apod-checkbox">hide</label>
-                    <hr>
-                    </div>`);
+                    src=${apodData.url} title="Astronomy Picture of the Day">
+                    </iframe>`);
     } else {
         $("#aPOD-results").append(`
                     <h3>Astronomy Picture of The Day</h3>
                     <p>${apodData.title}</p>
                     <img class = "api-images" src=${apodData.url} alt="Astronomy Picture of the Day"></img><br />`);
-        $("#aPOD-results").after(`<div class="checkbox"> <input type="checkbox" id="apod-checkbox" name="apod-checkbox" value= true>
-                    <label for="apod-checkbox">hide</label>
-                    <hr>
-                    </div>`);
     }
 }
 
 function renderMarsPhotos(marsPhotosData, selectedDate) {
     $("#mars-results").empty();
     $("#mars-results").append(`
-                    <h3>Photos from Mars!</h3>
-                    <p>The Mars rover took the below photo on ${selectedDate}</p>
-                    <img class = "api-images" src= ${marsPhotosData.photos[0].img_src} alt="Mars Rover Photo"></img><br />`);
-    $("#mars-results").after(`<div class="checkbox"><input type="checkbox" id="marsPhotos-checkbox" name="marsPhotos-checkbox" value = true>
-                    <label for="marsPhotos-checkbox">hide</label>
-                    </div>`);
-
+                        <h3>Photos from Mars!</h3>
+                        <p>The Mars rover took the below photo on ${selectedDate}</p>
+                        <img class = "api-images" src= ${marsPhotosData.photos[0].img_src} alt="Mars Rover Photo"></img><br />`);
 }
+
 
 function displayResults([apodData, neowsData, marsPhotosData], selectedDate) {
     $("#results").removeClass("hidden");
-    $(".checkbox").empty(); 
+    $('#js-error-message').empty();
     store.asteroidTracker = 0;
     renderApod(apodData, selectedDate);
-    fillStore(neowsData, selectedDate);
+    renderNeows(neowsData, selectedDate);
     renderMarsPhotos(marsPhotosData, selectedDate);
     hideResults();
 }
@@ -204,7 +188,27 @@ function watchCalender() {
 }
 
 function hideResults() {
-    //a function that hides results based on user request 
+
+    //the following events determines if checkboxes are checked on date selection, and changes class accordingly. 
+    $("#date-picker-js").click(function () {
+        if ($("#apod-checkbox").is(':checked')) {
+            $("#aPOD-results").addClass("hidden");
+        }
+    });
+
+    $("#date-picker-js").click(function () {
+        if ($("#neows-checkbox").is(':checked')) {
+            $("#neoWs-results").addClass("hidden");
+        }
+    });
+
+    $("#date-picker-js").click(function () {
+        if ($("#marsPhotos-checkbox").is(':checked')) {
+            $("#mars-results").addClass("hidden");
+        }
+    });
+
+    //the following events change the div class to hidden depending on checkbox value. 
     $("#apod-checkbox").change(function () {
         if (this.checked) {
             $("#aPOD-results").addClass("hidden");
@@ -227,7 +231,7 @@ function hideResults() {
         } else {
             $("#mars-results").removeClass("hidden");
         }
-    });  
+    });
 }
 
 $(watchCalender); 
