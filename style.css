@@ -8,23 +8,23 @@ body {
 }
 
 .api-images {
-    height: 250px;
-    width: 325px; 
+    max-width: 325px; 
 }
 
-iframe {
-    height: 250px;
-    width: 325px; 
-}
-
-@media all and (min-width: 900px) {
-    iframe {
-        height: 500px;
-        width: 650px; 
+iframe{
+    height: 182.8125px; 
+    width: 325px;
     }
 
+@media all and (min-width: 900px) {
+ 
+
+    iframe {
+    height: 365.625px; 
+    width: 650px;
+    }        
+
     .api-images {
-        height: 500px;
-        width: 650px; 
+        max-width: 650px; 
     }
 }    
