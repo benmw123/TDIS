@@ -22,9 +22,8 @@ function fetchAndCatch(url) {
         .then(response => {
             if (response.ok) {
                 return response.json();
-            }
-            throw new Error(response.statusText);
-        })
+        }
+    })
 }
 
 function getApod(selectedDate) {
@@ -86,7 +85,7 @@ function asteroidNavigator(selectedDate) {
     $("#next-button").click(function () {
         if (store.asteroidTracker < store.neowsArray.length - 1) {
             store.asteroidTracker += 1;
-            console.log(store.asteroidTracker); 
+            console.log(store.asteroidTracker);
             neoWsHTMLgenerator(selectedDate);
         }
     });
@@ -171,6 +170,7 @@ function watchCalender() {
 
     $("#date-picker").flatpickr({
         enableTime: false,
+        disableMobile: true, 
         dateFormat: "Y-m-d",
         defaultDate: "today",
         maxDate: "today",
