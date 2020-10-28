@@ -170,11 +170,17 @@ function watchCalender() {
 
     $("#date-picker").flatpickr({
         enableTime: false,
-        disableMobile: "true", 
         dateFormat: "Y-m-d",
         defaultDate: "today",
         maxDate: "today",
-        minDate: "2012-08-06"
+        minDate: "2012-08-06",
+        //the below onChange option adds calendar validation for iOS users, since iOS native calendar ignors min/maxDate. 
+        onChange: function(undefined, dateStr) {
+            let date = dateStr.replaceAll("-",""); 
+            if(date < 20120806) {
+                alert("minimum accepted date is 2012-08-09 (YYYY-MM-DD)");
+            }
+        }
     });
 
     //.ready to generate data based on the current date by default. 

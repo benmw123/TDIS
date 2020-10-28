@@ -21,10 +21,11 @@ FEEDBACK
 [x]Asteroids are sometimes inaccurate.
 [x]Change error message to say "Data not available for selected date. If you today is the current date, it is likely the databases haven't been updated. Try selecting a differnet date."
 [x]images sometimes have odd resolutions (streching or shrinking).
-[]katie on Iphone and Safari could select a date out side of the validation.
 [x]checkboxes still show when user is given fetch error.  
+[]Data for mars photos are unreliable which causes way too many fetch errors. Can i handle fetch errors seperately for each fetch request? 
 []optional: Add rear photo to Mars Rover
 []refactor
+[x]flatpickr disabled on iOS - add custom validation. 
 
 
 Author: Benjamin Whitehurst 
