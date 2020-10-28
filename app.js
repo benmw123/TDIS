@@ -170,7 +170,7 @@ function watchCalender() {
 
     $("#date-picker").flatpickr({
         enableTime: false,
-        disableMobile: true, 
+        disableMobile: "true", 
         dateFormat: "Y-m-d",
         defaultDate: "today",
         maxDate: "today",
