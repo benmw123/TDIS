@@ -26,6 +26,7 @@ FEEDBACK
 []optional: Add rear photo to Mars Rover
 []refactor
 [x]flatpickr disabled on iOS - add custom validation. 
+[]Alert box cannot be styled. can't be seen on iOS. Create or use custom popout for calendar validation. 
 
 
 Author: Benjamin Whitehurst 

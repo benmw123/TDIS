@@ -17,7 +17,6 @@ iframe{
     }
 
 @media all and (min-width: 900px) {
- 
 
     iframe {
     height: 365.625px; 
@@ -27,4 +26,5 @@ iframe{
     .api-images {
         max-width: 650px; 
     }
+
 }    
