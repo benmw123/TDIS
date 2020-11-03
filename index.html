@@ -22,23 +22,23 @@
         <div class="date-wrap">
             <input id="date-picker" data-date-format="y-m-d" /> <!-- date picker-->
             <input type="button" id="date-picker-js" name="submit" value="submit">
+            <hr>
         </div>
         <section id="results" class="hidden">
             <!-- all results will be rendered in the following divs within the section-->
             <div id="aPOD-results"></div>
             <div class="checkbox"> <input type="checkbox" id="apod-checkbox" name="apod-checkbox" value=true>
                 <label for="apod-checkbox">hide</label>
-                <hr>
+                <hr class="hr-align">
             </div>
             <div id="neows-results"></div>
-            <div class="checkbox neows"><input type="checkbox" id="neows-checkbox" name="neows-checkbox" value=true>
+            <div class="checkbox"><input type="checkbox" id="neows-checkbox" name="neows-checkbox" value=true>
                 <label for="neows-checkbox">hide</label>
-                <hr>
+                <hr class="hr-align">
             </div>
             <div id="mars-results"></div>
             <div class="checkbox"><input type="checkbox" id="marsPhotos-checkbox" name="marsPhotos-checkbox" value=true>
-                <label for="marsPhotos-checkbox">hide</label>
-            </div>
+                <label for="marsPhotos-checkbox">hide</label></div>
         </section>
     </main>
     <script src="app.js"></script>

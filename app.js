@@ -7,6 +7,7 @@ let store = {
     asteroidTracker: 0,
     neowsArray: "",
     currentAsteroid: "",
+    errorMessage: `<p><span class="error"> !!! </span> No data is available for selected date<span class="error"> !!! </span></p>`
 };
 
 /********** FETCH FUNCTIONS **********/
@@ -102,7 +103,7 @@ function renderNeows(neowsData, selectedDate) {
         $("#neows-results").empty();
         $("#neows-results").append(`
                     <h3>Near Earth Object Alert!</h3>
-                    <p>No data is available for selected date.<p>`)
+                    ${store.errorMessage}`)
     } else {
         store.currentAsteroid = store.neowsArray[store.asteroidTracker]
         neoWsHTMLgenerator(selectedDate);
@@ -122,10 +123,11 @@ function neoWsHTMLgenerator(selectedDate) {
     $("#neows-results").empty();
     $("#neows-results").append(`
                     <h3>Near Earth Object Alert!</h3>
-                    <p>There are ${store.neowsArray.length} asteroids making their closest approach to Earth on ${selectedDate}.</p>
-                    <p>The asteroid ${store.currentAsteroid.name.replace("(", '').replace(")", "")} is traveling 
-                    at a relative speed of ${mphRounded} miles per hour,
-                    and is approximately ${distanceRounded} miles from earth! </p>
+                    <p>There are <span class="dynamic-text">${store.neowsArray.length}</span> 
+                    asteroids making their closest approach to Earth on <span class="dynamic-text">${selectedDate}</span>.</p>
+                    <p>The asteroid <span class="dynamic-text">${store.currentAsteroid.name.replace("(", '').replace(")", "")}</span>
+                    is traveling at a relative speed of <span class="dynamic-text">${mphRounded}</span> miles per hour,
+                    and is approximately <span class="dynamic-text">${distanceRounded}</span> miles from earth! </p>
                     <button id="previous-button">Previous</button>
                     <button id="next-button">Next</button>`);
 
@@ -139,13 +141,13 @@ function renderApod(apodData) {
     $("#aPOD-results").empty();
     if (apodData === undefined) {
         $("#aPOD-results").append(`
-                    <h3>Astronomy Picture of The Day!</h3>
-                    <p>No data is available for selected date.<p>`)
+                    <h3>Astronomy Picture of the Day!</h3>
+                    ${store.errorMessage}`)
     } else {
         //determine if ApodData is a video or an image.
         if (apodData.media_type === "video") {
             $("#aPOD-results").append(`
-                    <h3>Astronomy Picture of The Day!</h3>
+                    <h3>Astronomy Picture of the Day!</h3>
                     <p>${apodData.title}</p>
                     <iframe src=${apodData.url} title="Astronomy Picture of the Day">
                     </iframe>`);
@@ -165,11 +167,11 @@ function renderMarsPhotos(marsPhotosData, selectedDate) {
     if (marsPhotosData.photos[0] === undefined) {
         $("#mars-results").append(`
         <h3>Photos from Mars!</h3>
-        <p>No data is available for selected date.<p>`)
+        ${store.errorMessage}`)
     } else {
         $("#mars-results").append(`
                         <h3>Photos from Mars!</h3>
-                        <p>The Mars rover took the below photo on ${selectedDate}.</p>
+                        <p>The Mars rover took the below photo on ${selectedDate}</p>
                         <img class = "api-images" src= ${marsPhotosData.photos[0].img_src} alt="Mars Rover Photo"></img><br />`);
     }
 }
@@ -199,6 +201,7 @@ function hideDiv(checkbox, results) {
     $("#date-picker-js").click(function () {
         if ($(checkbox).is(':checked')) {
             $(results).addClass("hidden");
+            
         }
     });
 
