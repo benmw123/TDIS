@@ -70,6 +70,10 @@ iframe{
 
 @media all and (min-width: 900px) {
 
+    body {
+        font-size: 18px; 
+    }
+
     h1 {
     font-size: 100px;
     }
