@@ -183,14 +183,12 @@ function asteroidNavigator(selectedDate) {
     $("#next-button").click(function () {
         if (store.asteroidTracker < store.neowsArray.length - 1) {
             store.asteroidTracker += 1;
-            console.log(store.asteroidTracker);
             neoWsHTMLgenerator(selectedDate);
         }
     });
     $("#previous-button").click(function () {
         if (store.asteroidTracker > 0) {
             store.asteroidTracker -= 1;
-            console.log(store.asteroidTracker);
             neoWsHTMLgenerator(selectedDate);
         }
     });
@@ -201,7 +199,7 @@ function hideDiv(checkbox, results) {
     $("#date-picker-js").click(function () {
         if ($(checkbox).is(':checked')) {
             $(results).addClass("hidden");
-            
+
         }
     });
 
